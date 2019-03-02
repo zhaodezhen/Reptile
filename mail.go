@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"golang.org/x/net/html/charset"
-	encoding2 "golang.org/x/text/encoding"
+	"golang.org/x/text/encoding"
 	"golang.org/x/text/transform"
 	"io"
 	"io/ioutil"
@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+
 	resp, err := http.Get("https://www.zhenai.com/zhenghun")
 	if err != nil {
 		panic(err)
@@ -31,7 +32,7 @@ func main() {
 	}
 	printCityList(all)
 }
-func determineEncoding(r io.Reader) encoding2.Encoding {
+func determineEncoding(r io.Reader) encoding.Encoding {
 	bytes, err := bufio.NewReader(r).Peek(1024)
 	if err != nil {
 		panic(err)
@@ -40,10 +41,13 @@ func determineEncoding(r io.Reader) encoding2.Encoding {
 	return e
 }
 func printCityList(contents []byte) {
-	re := regexp.MustCompile(`<a href="http://www.zhenai.com/zhenghun/[0-9a-z]+"[^>]*>[^<]+</a>`)
-	matches := re.FindAll(contents, -1)
+	re := regexp.MustCompile(`<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`)
+	matches := re.FindAllSubmatch(contents, -1)
 
 	for _, m := range matches {
-		fmt.Printf("%s\n", m)
+
+		fmt.Printf("City: %s,URL: %s\n",m[2],m[1])
 	}
+
+
 }
