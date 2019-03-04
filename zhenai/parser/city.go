@@ -2,15 +2,14 @@ package parser
 
 import (
 	"crawler/engine"
-	"log"
 	"regexp"
 )
 
 const cityRe = `<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a>`
+
 func ParseCity(contents []byte) engine.ParserResult {
 	re := regexp.MustCompile(cityRe)
 	matches := re.FindAllSubmatch(contents, -1)
-	log.Printf("%s",matches)
 
 	result := engine.ParserResult{}
 	for _, m := range matches {
