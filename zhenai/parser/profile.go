@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"crawler/types"
+	"crawler/engine"
 	"crawler/zhenai/model"
 	"log"
 	"src/github.com/PuerkitoBio/goquery"
@@ -9,7 +9,7 @@ import (
 )
 
 //获取用户详情
-func ParseProfile(contents []byte) types.ParseResult {
+func ParseProfile(contents []byte) engine.ParserResult {
 	document, err := goquery.NewDocumentFromReader(strings.NewReader(string(contents)))
 	if err != nil {
 		log.Fatalln(err)
@@ -30,7 +30,7 @@ func ParseProfile(contents []byte) types.ParseResult {
 	profile.Income = user[7]
 	profile.Occupation = user[8]
 	profile.Education = user[9]
-	result := types.ParseResult{
+	result := engine.ParserResult{
 		Items: []interface{}{profile},
 	}
 	return result
